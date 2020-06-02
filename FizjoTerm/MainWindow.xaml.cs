@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Xps.Packaging;
 using TabMenu2.Models;
 
 namespace FizjoTerm
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Okno główne aplikacji
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -30,14 +32,11 @@ namespace FizjoTerm
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
+        {            
             TabMenu2.DefConnDataSet defConnDataSet = ((TabMenu2.DefConnDataSet)(this.FindResource("defConnDataSet")));
             // Load data into the table Patient. You can modify this code as needed.
             TabMenu2.DefConnDataSetTableAdapters.PatientTableAdapter defConnDataSetPatientTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.PatientTableAdapter();
             defConnDataSetPatientTableAdapter.Fill(defConnDataSet.Patient);
-            //System.Windows.Data.CollectionViewSource patientViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("patientViewSource")));
-            //patientViewSource.View.MoveCurrentToFirst();
             dbcontext.Patients.Load();
             CollectionViewSource patientViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("patientViewSource")));
             patientViewSource.Source = dbcontext.Patients.Local;
@@ -45,8 +44,6 @@ namespace FizjoTerm
             // Load data into the table Referral. You can modify this code as needed.
             TabMenu2.DefConnDataSetTableAdapters.ReferralTableAdapter defConnDataSetReferralTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.ReferralTableAdapter();
             defConnDataSetReferralTableAdapter.Fill(defConnDataSet.Referral);
-            //System.Windows.Data.CollectionViewSource referralViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("referralViewSource")));
-            //referralViewSource.View.MoveCurrentToFirst();
             dbcontext.Referrals.Load();
             CollectionViewSource referralViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("referralViewSource")));
             referralViewSource.Source = dbcontext.Referrals.Local;
@@ -55,8 +52,6 @@ namespace FizjoTerm
             // Load data into the table Physiotherapist. You can modify this code as needed.
             TabMenu2.DefConnDataSetTableAdapters.PhysiotherapistTableAdapter defConnDataSetPhysiotherapistTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.PhysiotherapistTableAdapter();
             defConnDataSetPhysiotherapistTableAdapter.Fill(defConnDataSet.Physiotherapist);
-            //System.Windows.Data.CollectionViewSource physiotherapistViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("physiotherapistViewSource")));
-            //physiotherapistViewSource.View.MoveCurrentToFirst();
             dbcontext.Physiotherapists.Load();
             CollectionViewSource physiotherapistViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("physiotherapistViewSource")));
             physiotherapistViewSource.Source = dbcontext.Physiotherapists.Local;
@@ -64,18 +59,27 @@ namespace FizjoTerm
             // Load data into the table Visit. You can modify this code as needed.
             TabMenu2.DefConnDataSetTableAdapters.VisitTableAdapter defConnDataSetVisitTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.VisitTableAdapter();
             defConnDataSetVisitTableAdapter.Fill(defConnDataSet.Visit);
-            //System.Windows.Data.CollectionViewSource visitViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("visitViewSource")));
-            //visitViewSource.View.MoveCurrentToFirst();
             dbcontext.Visits.Load();
             CollectionViewSource visitViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("visitViewSource")));
             visitViewSource.Source = dbcontext.Visits.Local;
             CbPatient2.ItemsSource = dbcontext.Patients.Local;
             CbPhysiotherapist.ItemsSource = dbcontext.Physiotherapists.Local;
 
-            RbAdding.IsChecked = true;
+            // Load data into the table Report. You can modify this code as needed.
+            TabMenu2.DefConnDataSetTableAdapters.ReportTableAdapter defConnDataSetReportTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.ReportTableAdapter();
+            defConnDataSetReportTableAdapter.Fill(defConnDataSet.Report);
+            dbcontext.Reports.Load();
+            CollectionViewSource reportViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("reportViewSource")));
+            reportViewSource.Source = dbcontext.Reports.Local;
 
-            List<string> godziny = new List<string>() {"6:00", "6:30" };
-            CbVisitTime.ItemsSource = godziny;
+            RbAdding.IsChecked = true;
+            List<string> hours = new List<string>() { "7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30" };
+            CbVisitTime.ItemsSource = hours;
+            List<string> reportTypes = new List<string>() { "Dzienny", "Miesięczny", "Roczny" };
+            CbReportType.ItemsSource = reportTypes;
+            reportDataGrid.SelectedIndex = -1;
+            visitsFromReport.ItemsSource = null;
+            LbPreviewReport.Content = "Wybierz raport aby zobaczyć podgląd";
         }
 
         private void BtAddPatient_Click(object sender, RoutedEventArgs e)
@@ -96,7 +100,6 @@ namespace FizjoTerm
                 {
                     MessageBox.Show("Podaj poprawny numer PESEL!");
                 }
-
             }
             else
             {
@@ -278,7 +281,7 @@ namespace FizjoTerm
             {
                 CbReferral.ItemsSource = dbcontext.Referrals.Local.Where(r => r.Patient.Equals(CbPatient2.SelectedItem as Patient));
             }
-            else if (CbPatient2.SelectedIndex > -1)
+            else if (CbPatient2.SelectedIndex > -1 && RbAdding.IsChecked == true)
                 MessageBox.Show("Brak zarejestrowanych skierowań dla pacjenta " + CbPatient2.SelectedItem.ToString());
         }
 
@@ -303,7 +306,6 @@ namespace FizjoTerm
             CbVisitTime.IsEnabled = true;
             LabTodayVisits.Content = "Dzisiejsze wizyty:";
             CbReferral.IsEnabled = true;
-            //visitViewSource.Source = dbcontext.Visits.Local.Where(v => v.VisitDate.Date.Equals(DateTime.Now.Date));
             visitDataGrid.ItemsSource = dbcontext.Visits.Local.Where(v => v.VisitDate.Date.Equals(DateTime.Now.Date));
             visitDataGrid.Items.Refresh();
 
@@ -351,10 +353,100 @@ namespace FizjoTerm
 
         private void CbPatient2_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Back)
+            if(e.Key == Key.Back || e.Key == Key.Delete)
             {
                 CbPatient2.SelectedIndex = -1;
             }
+        }
+
+        private void CalendarVisit_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                CalendarVisit.SelectedDate = null;
+            }
+        }
+
+        private void BtGenerateReport_Click(object sender, RoutedEventArgs e)
+        {
+            if (CbReportType.SelectedIndex < 0)
+            {
+                MessageBox.Show("Wybierz typ raportu!");
+            }
+            else
+            {
+                switch (CbReportType.SelectedItem.ToString().Trim())
+                {
+                    case "Dzienny":
+                        ICollection<Visit> dayResults = dbcontext.Visits.Local.Where(r => r.VisitDate.Equals(CalendarReport.SelectedDate)).ToList();
+                        Report.AddReport("Raport_" + CbReportType.SelectedItem.ToString() + "_" + CalendarReport.SelectedDate.Value.ToShortDateString(), dayResults, dbcontext);
+                        break;
+
+                    case "Miesięczny":
+                        ICollection<Visit> monthResults = dbcontext.Visits.Local.Where(r => r.VisitDate.Month.Equals(CalendarReport.SelectedDate.Value.Month) && r.VisitDate.Year.Equals(CalendarReport.SelectedDate.Value.Year)).ToList();
+                        Report.AddReport("Raport_" + CbReportType.SelectedItem.ToString() + "_" + CalendarReport.SelectedDate.Value.Month + "." + CalendarReport.SelectedDate.Value.Year, monthResults, dbcontext);
+
+                        break;
+
+                    case "Roczny":
+                        ICollection<Visit> yearResults = dbcontext.Visits.Local.Where(r => r.VisitDate.Year.Equals(CalendarReport.SelectedDate.Value.Year)).ToList();
+                        Report.AddReport("Raport_" + CbReportType.SelectedItem.ToString() + "_" + CalendarReport.SelectedDate.Value.Year, yearResults, dbcontext);
+
+                        break;
+                }
+            }
+        }
+
+        private void reportDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Report r1 = reportDataGrid.SelectedItem as Report;
+            if (r1 != null)
+            {
+                visitsFromReport.ItemsSource = r1.Visits.ToList();
+                LbPreviewReport.Content = "Podgląd raportu:";
+            }
+        }
+
+        private void BtPrintReport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintDialog pDialog = new PrintDialog();
+            pDialog.PageRangeSelection = PageRangeSelection.AllPages;
+            pDialog.UserPageRangeEnabled = true;
+            Nullable<Boolean> print = pDialog.ShowDialog();
+            if (print == true)
+            {
+                pDialog.PrintVisual(visitsFromReport, "Grid Printing.");
+            }
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void patientDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            dbcontext.SaveChanges();
+        }
+
+        private void referralDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            dbcontext.SaveChanges();
+        }
+
+        private void visitDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            dbcontext.SaveChanges();
+        }
+
+        private void reportDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            dbcontext.SaveChanges();
+        }
+
+        private void physiotherapistDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            dbcontext.SaveChanges();
         }
     }
 }

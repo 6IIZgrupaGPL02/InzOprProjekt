@@ -9,6 +9,9 @@ using System.Windows;
 
 namespace TabMenu2.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca dane skierowania
+    /// </summary>
     [Table("Referral")]
     public class Referral
     {
@@ -70,7 +73,7 @@ namespace TabMenu2.Models
 
         public override string ToString()
         {
-            return "Data wystawienia: " + DateReferral.Date.ToShortDateString() + " Rozpoznanie: " + Diagnosis + " Liczba zabiegów " + NbOfDays ;
+            return Patient.Name + " " + Patient.Surname + " " + Diagnosis + " " + DateReferral.Date.ToShortDateString();
         }
     }
 }

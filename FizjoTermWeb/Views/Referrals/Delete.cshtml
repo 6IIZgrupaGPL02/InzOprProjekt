@@ -1,0 +1,72 @@
+﻿@model FizjoTermWeb.Models.Referral
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+    <h2>Usuń</h2>
+
+    <h3>Czy na pewno usunąć?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Diagnosis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Diagnosis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Icd10)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Icd10)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NbOfDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NbOfDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateReferral)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateReferral)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateSaved)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.Pesel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient.Pesel)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Usuń" class="btn btn-default" /> |
+            @Html.ActionLink("Wróć do listy", "Index")
+        </div>
+    }
+</div>

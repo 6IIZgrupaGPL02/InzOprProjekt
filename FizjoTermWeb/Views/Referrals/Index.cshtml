@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FizjoTermWeb.Models.Referral>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <h2>Skierowania</h2>
+
+<p>
+    @Html.ActionLink("Dodaj", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.ImieNazwiskoPesel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Diagnosis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Icd10)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NbOfDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateReferral)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Patient.ImieNazwiskoPesel)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Diagnosis)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Icd10)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NbOfDays)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateReferral)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateSaved)
+    </td>
+
+    <td>
+        @Html.ActionLink("Edycja", "Edit", new { id = item.IdReferral }) |
+        @Html.ActionLink("Szczegóły", "Details", new { id = item.IdReferral }) |
+        @Html.ActionLink("Usuń", "Delete", new { id = item.IdReferral })
+    </td>
+</tr>
+}
+
+</table>

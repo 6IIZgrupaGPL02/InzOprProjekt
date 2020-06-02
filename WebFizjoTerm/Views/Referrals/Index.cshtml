@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WebFizjoTerm.Models.Referral>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Diagnosis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Icd10)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NbOfDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateReferral)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.Pesel)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Diagnosis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Icd10)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NbOfDays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateReferral)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSaved)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Patient.Pesel)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdReferral }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdReferral }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdReferral })
+        </td>
+    </tr>
+}
+
+</table>

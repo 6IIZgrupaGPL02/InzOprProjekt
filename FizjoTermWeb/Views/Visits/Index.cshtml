@@ -1,0 +1,63 @@
+﻿@model IEnumerable<FizjoTermWeb.Models.Visit>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <h2>Wizyty</h2>
+
+<p>
+    @Html.ActionLink("Dodaj", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.VisitDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VisitTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VisitCompleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physiotherapist.NameSurname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Referral.Patient.ImieNazwiskoPesel)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSaved)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitCompleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physiotherapist.NameSurname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Referral.Patient.ImieNazwiskoPesel)
+        </td>
+        <td>
+            @Html.ActionLink("Edycja", "Edit", new { id=item.IdVisit }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id=item.IdVisit }) |
+            @Html.ActionLink("Usuń", "Delete", new { id=item.IdVisit })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WebFizjoTerm.Models.Visit>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.VisitDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VisitTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Physiotherapist.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Referral.Diagnosis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Report.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSaved)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Physiotherapist.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Referral.Diagnosis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Report.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdVisit }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdVisit }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdVisit })
+        </td>
+    </tr>
+}
+
+</table>

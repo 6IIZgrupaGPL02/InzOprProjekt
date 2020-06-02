@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +11,12 @@ using System.Windows;
 
 namespace TabMenu2.Models
 {
+    /// <summary>
+    /// Klasa reprezentująca dane wizyty
+    /// </summary>
     [Table("Visit")]
     public class Visit
+
     {
         [Key]
         public int IdVisit { get; set; }
@@ -22,17 +28,21 @@ namespace TabMenu2.Models
         public DateTime VisitDate { get; set; }
         public string VisitTime { get; set; }
         public DateTime DateSaved { get; set; }
+        public bool VisitCompleted { get; set; }
+
         public virtual Physiotherapist Physiotherapist { get; set; }
         public virtual Referral Referral { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
 
         public Visit() { }
-        public Visit(Physiotherapist physio, Referral referral, DateTime date, string time)
+        public Visit(Physiotherapist physio, Referral referral, DateTime date, string time, bool visitCompleted = false)
         {
             this.Physiotherapist = physio;
             this.Referral = referral;
             this.VisitDate = date;
             this.VisitTime = time;
             this.DateSaved = DateTime.Now;
+            this.VisitCompleted = visitCompleted;
         }
 
         public static void AddVisit(Physiotherapist physio, Referral referral, DateTime date, string time, ApplicationDbContext dbcontext)
@@ -64,10 +74,17 @@ namespace TabMenu2.Models
 
         public static IEnumerable<Visit> SearchVisit(Patient patient, Physiotherapist physio, DateTime? selDate, ApplicationDbContext dbcontext)
         {
-            IEnumerable<Visit> results = dbcontext.Visits.Local.Where(v => patient!= null ? v.Referral.Patient.Equals(patient) : true 
-                                                                        && physio!=null ? v.Physiotherapist.Equals(physio) : true
-                                                                        && selDate!= null ? v.VisitDate.Equals(selDate) : true);
+
+            //Visit w = dbcontext.Visits.Local.Where(ww => ww.IdVisit == 36) as Visit;
+            //DateTime dt = DateTime.Now;
+            //MessageBox.Show(selDate.Value.ToShortDateString() + " " + dt.ToShortDateString());
+            IEnumerable <Visit> results = dbcontext.Visits.Local.Where(v => (patient != null ? v.Referral.Patient.Equals(patient) : true) && (physio != null ? v.Physiotherapist.Equals(physio) : true) && (selDate != null ? v.VisitDate.Equals(selDate) : true));
             return results;
+        }
+
+        public override string ToString()
+        {
+            return VisitDate + " " + Referral.Patient.ToString();
         }
     }
 }

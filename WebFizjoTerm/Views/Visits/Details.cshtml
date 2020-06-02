@@ -1,0 +1,66 @@
+﻿@model WebFizjoTerm.Models.Visit
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Visit</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.VisitDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VisitDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VisitTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VisitTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSaved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateSaved)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Physiotherapist.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Physiotherapist.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Referral.Diagnosis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Referral.Diagnosis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Report.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Report.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdVisit }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
