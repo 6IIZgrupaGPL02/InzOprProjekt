@@ -11,19 +11,37 @@ namespace WebFizjoTerm.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Visit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Visit()
+        {
+            this.Report = new HashSet<Report>();
+        }
+
         public int IdVisit { get; set; }
+        [Display(Name = "Fizjoterapeuta")]
         public int IdPhysiotherapist { get; set; }
+        [Display(Name = "Pacjent")]
         public int IdReferral { get; set; }
+        [Display(Name = "Data wizyty")]
+        [DataType(DataType.Date)]
         public System.DateTime VisitDate { get; set; }
+        [Display(Name = "Godzina wizyty")]
         public string VisitTime { get; set; }
+        [Display(Name = "Data zapisu")]
+        [DataType(DataType.Date)]
         public System.DateTime DateSaved { get; set; }
-        public Nullable<int> Report_IdReport { get; set; }
+        [Display(Name = "Wizyta zrealizowana")]
+        public bool VisitCompleted { get; set; }
+        [Display(Name = "Wizyta rozliczona")]
+        public bool VisitSettled { get; set; }
     
         public virtual Physiotherapist Physiotherapist { get; set; }
         public virtual Referral Referral { get; set; }
-        public virtual Report Report { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Report> Report { get; set; }
     }
 }

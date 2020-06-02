@@ -12,10 +12,9 @@ namespace WebFizjoTerm.Controllers
 {
     public class PatientsController : Controller
     {
-        private DefConnEntities1 db = new DefConnEntities1();
+        private DefConnEntities2 db = new DefConnEntities2();
 
         // GET: Patients
-        [Authorize]
         public ActionResult Index()
         {
             return View(db.Patient.ToList());

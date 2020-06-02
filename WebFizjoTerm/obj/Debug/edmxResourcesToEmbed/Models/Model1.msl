@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DefConnModelStoreContainer" CdmEntityContainer="DefConnEntities2">
+    <EntitySetMapping Name="Patient">
+      <EntityTypeMapping TypeName="DefConnModel.Patient">
+        <MappingFragment StoreEntitySet="Patient">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Pesel" ColumnName="Pesel" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="Adress" ColumnName="Adress" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Physiotherapist">
+      <EntityTypeMapping TypeName="DefConnModel.Physiotherapist">
+        <MappingFragment StoreEntitySet="Physiotherapist">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Npwz" ColumnName="Npwz" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="Adress" ColumnName="Adress" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Referral">
+      <EntityTypeMapping TypeName="DefConnModel.Referral">
+        <MappingFragment StoreEntitySet="Referral">
+          <ScalarProperty Name="IdReferral" ColumnName="IdReferral" />
+          <ScalarProperty Name="IdPatient" ColumnName="IdPatient" />
+          <ScalarProperty Name="Diagnosis" ColumnName="Diagnosis" />
+          <ScalarProperty Name="Icd10" ColumnName="Icd10" />
+          <ScalarProperty Name="NbOfDays" ColumnName="NbOfDays" />
+          <ScalarProperty Name="DateReferral" ColumnName="DateReferral" />
+          <ScalarProperty Name="DateSaved" ColumnName="DateSaved" />
+          <ScalarProperty Name="Treatments" ColumnName="Treatments" />
+          <ScalarProperty Name="Doctor" ColumnName="Doctor" />
+          <ScalarProperty Name="ReferralCompleted" ColumnName="ReferralCompleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Report">
+      <EntityTypeMapping TypeName="DefConnModel.Report">
+        <MappingFragment StoreEntitySet="Report">
+          <ScalarProperty Name="IdReport" ColumnName="IdReport" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Visit">
+      <EntityTypeMapping TypeName="DefConnModel.Visit">
+        <MappingFragment StoreEntitySet="Visit">
+          <ScalarProperty Name="IdVisit" ColumnName="IdVisit" />
+          <ScalarProperty Name="IdPhysiotherapist" ColumnName="IdPhysiotherapist" />
+          <ScalarProperty Name="IdReferral" ColumnName="IdReferral" />
+          <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+          <ScalarProperty Name="VisitTime" ColumnName="VisitTime" />
+          <ScalarProperty Name="DateSaved" ColumnName="DateSaved" />
+          <ScalarProperty Name="VisitCompleted" ColumnName="VisitCompleted" />
+          <ScalarProperty Name="VisitSettled" ColumnName="VisitSettled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="VisitReports" TypeName="DefConnModel.VisitReports" StoreEntitySet="VisitReports">
+      <EndProperty Name="Report">
+        <ScalarProperty Name="IdReport" ColumnName="Report_IdReport" />
+      </EndProperty>
+      <EndProperty Name="Visit">
+        <ScalarProperty Name="IdVisit" ColumnName="Visit_IdVisit" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

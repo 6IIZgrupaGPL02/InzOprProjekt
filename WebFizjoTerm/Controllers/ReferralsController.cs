@@ -12,10 +12,9 @@ namespace WebFizjoTerm.Controllers
 {
     public class ReferralsController : Controller
     {
-        private DefConnEntities1 db = new DefConnEntities1();
+        private DefConnEntities2 db = new DefConnEntities2();
 
         // GET: Referrals
-        [Authorize]
         public ActionResult Index()
         {
             var referral = db.Referral.Include(r => r.Patient);
@@ -40,7 +39,7 @@ namespace WebFizjoTerm.Controllers
         // GET: Referrals/Create
         public ActionResult Create()
         {
-            ViewBag.IdPatient = new SelectList(db.Patient, "Id", "Pesel");
+            ViewBag.IdPatient = new SelectList(db.Patient, "Id", "ImieNazwiskoPesel");
             return View();
         }
 
@@ -49,7 +48,7 @@ namespace WebFizjoTerm.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdReferral,IdPatient,Diagnosis,Icd10,NbOfDays,DateReferral,DateSaved")] Referral referral)
+        public ActionResult Create([Bind(Include = "IdReferral,IdPatient,Diagnosis,Icd10,NbOfDays,DateReferral,DateSaved,Treatments,Doctor,ReferralCompleted")] Referral referral)
         {
             if (ModelState.IsValid)
             {
@@ -74,7 +73,7 @@ namespace WebFizjoTerm.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IdPatient = new SelectList(db.Patient, "Id", "Pesel", referral.IdPatient);
+            ViewBag.IdPatient = new SelectList(db.Patient, "Id", "ImieNazwiskoPesel", referral.IdPatient);
             return View(referral);
         }
 
@@ -83,7 +82,7 @@ namespace WebFizjoTerm.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdReferral,IdPatient,Diagnosis,Icd10,NbOfDays,DateReferral,DateSaved")] Referral referral)
+        public ActionResult Edit([Bind(Include = "IdReferral,IdPatient,Diagnosis,Icd10,NbOfDays,DateReferral,DateSaved,Treatments,Doctor,ReferralCompleted")] Referral referral)
         {
             if (ModelState.IsValid)
             {

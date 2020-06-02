@@ -11,7 +11,8 @@ namespace WebFizjoTerm.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Physiotherapist
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,15 +20,28 @@ namespace WebFizjoTerm.Models
         {
             this.Visit = new HashSet<Visit>();
         }
-    
+
         public int Id { get; set; }
         public string Email { get; set; }
         public int Npwz { get; set; }
+        [Display(Name = "Imiê")]
         public string Name { get; set; }
+        [Display(Name = "Nazwisko")]
         public string Surname { get; set; }
+        [Display(Name = "Adres")]
         public string Adress { get; set; }
+        [Display(Name = "Telefon")]
         public string Phone { get; set; }
-    
+        [Display(Name = "Fizjoterapeuta")]
+
+        public string NameSurname
+        {
+            get
+            {
+                return string.Format("{0} {1}", Name, Surname);
+            }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Visit> Visit { get; set; }
     }

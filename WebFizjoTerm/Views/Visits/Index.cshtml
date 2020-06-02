@@ -4,13 +4,16 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Wizyty</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nowa", "Create")
 </p>
 <table class="table">
     <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Referral.Patient.ImieNazwiskoPesel)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.VisitDate)
         </th>
@@ -21,43 +24,48 @@
             @Html.DisplayNameFor(model => model.DateSaved)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Physiotherapist.Email)
+            @Html.DisplayNameFor(model => model.VisitCompleted)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Referral.Diagnosis)
+            @Html.DisplayNameFor(model => model.VisitSettled)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Report.Name)
+            @Html.DisplayNameFor(model => model.Physiotherapist.NameSurname)
         </th>
+
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.VisitDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VisitTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateSaved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Physiotherapist.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Referral.Diagnosis)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Report.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdVisit }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdVisit }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdVisit })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Referral.Patient.ImieNazwiskoPesel)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.VisitDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.VisitTime)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateSaved)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.VisitCompleted)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.VisitSettled)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Physiotherapist.NameSurname)
+    </td>
+
+    <td>
+        @Html.ActionLink("Edycja", "Edit", new { id = item.IdVisit }) |
+        @Html.ActionLink("Szczegóły", "Details", new { id = item.IdVisit }) |
+        @Html.ActionLink("Usuń", "Delete", new { id = item.IdVisit })
+    </td>
+</tr>
 }
 
 </table>

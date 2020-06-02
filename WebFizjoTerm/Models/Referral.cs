@@ -11,7 +11,8 @@ namespace WebFizjoTerm.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Referral
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,14 +20,27 @@ namespace WebFizjoTerm.Models
         {
             this.Visit = new HashSet<Visit>();
         }
-    
+
         public int IdReferral { get; set; }
         public int IdPatient { get; set; }
+        [Display(Name = "Diagnoza")]
         public string Diagnosis { get; set; }
+        [Display(Name = "ICD10")]
         public string Icd10 { get; set; }
+        [Display(Name = "Liczba wizyt")]
         public int NbOfDays { get; set; }
+        [Display(Name = "Data wystawienia")]
+        [DataType(DataType.Date)]
         public System.DateTime DateReferral { get; set; }
+        [Display(Name = "Data zapisu")]
+        [DataType(DataType.Date)]
         public System.DateTime DateSaved { get; set; }
+        [Display(Name = "Zlecone zabiegi")]
+        public string Treatments { get; set; }
+        [Display(Name = "Lekarz zlecaj¹cy")]
+        public string Doctor { get; set; }
+        [Display(Name = "Skierowanie zrealizowane")]
+        public bool ReferralCompleted { get; set; }
     
         public virtual Patient Patient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

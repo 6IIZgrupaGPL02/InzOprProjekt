@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace TabMenu2.Models
-{/// <summary>
+{
+/// <summary>
 /// Klasa reprezentująca dane fizjoteraapeuty
 /// </summary>
     [Table("Physiotherapist")]

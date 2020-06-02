@@ -14,7 +14,9 @@ namespace TabMenu2.Models
     {
         public ApplicationDbContext() : base("DefConn")
         {
+
             Database.Initialize(false);
+
         }
 
         public DbSet<Patient> Patients { get; set; }

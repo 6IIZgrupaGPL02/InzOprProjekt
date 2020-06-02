@@ -26,6 +26,10 @@ namespace FizjoTerm
     {
         public ApplicationDbContext dbcontext = new ApplicationDbContext();
         //CollectionViewSource visitViewSource = new CollectionViewSource();
+        CollectionViewSource patientViewSource;
+        CollectionViewSource referralViewSource;
+        CollectionViewSource physiotherapistViewSource;
+        CollectionViewSource visitViewSource;
         public MainWindow()
         {
             InitializeComponent();
@@ -38,14 +42,14 @@ namespace FizjoTerm
             TabMenu2.DefConnDataSetTableAdapters.PatientTableAdapter defConnDataSetPatientTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.PatientTableAdapter();
             defConnDataSetPatientTableAdapter.Fill(defConnDataSet.Patient);
             dbcontext.Patients.Load();
-            CollectionViewSource patientViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("patientViewSource")));
+            patientViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("patientViewSource")));
             patientViewSource.Source = dbcontext.Patients.Local;
 
             // Load data into the table Referral. You can modify this code as needed.
             TabMenu2.DefConnDataSetTableAdapters.ReferralTableAdapter defConnDataSetReferralTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.ReferralTableAdapter();
             defConnDataSetReferralTableAdapter.Fill(defConnDataSet.Referral);
             dbcontext.Referrals.Load();
-            CollectionViewSource referralViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("referralViewSource")));
+            referralViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("referralViewSource")));
             referralViewSource.Source = dbcontext.Referrals.Local;
             CbPatient.ItemsSource = dbcontext.Patients.Local;
 
@@ -53,14 +57,14 @@ namespace FizjoTerm
             TabMenu2.DefConnDataSetTableAdapters.PhysiotherapistTableAdapter defConnDataSetPhysiotherapistTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.PhysiotherapistTableAdapter();
             defConnDataSetPhysiotherapistTableAdapter.Fill(defConnDataSet.Physiotherapist);
             dbcontext.Physiotherapists.Load();
-            CollectionViewSource physiotherapistViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("physiotherapistViewSource")));
+            physiotherapistViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("physiotherapistViewSource")));
             physiotherapistViewSource.Source = dbcontext.Physiotherapists.Local;
 
             // Load data into the table Visit. You can modify this code as needed.
             TabMenu2.DefConnDataSetTableAdapters.VisitTableAdapter defConnDataSetVisitTableAdapter = new TabMenu2.DefConnDataSetTableAdapters.VisitTableAdapter();
             defConnDataSetVisitTableAdapter.Fill(defConnDataSet.Visit);
             dbcontext.Visits.Load();
-            CollectionViewSource visitViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("visitViewSource")));
+            visitViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("visitViewSource")));
             visitViewSource.Source = dbcontext.Visits.Local;
             CbPatient2.ItemsSource = dbcontext.Patients.Local;
             CbPhysiotherapist.ItemsSource = dbcontext.Physiotherapists.Local;
@@ -80,6 +84,7 @@ namespace FizjoTerm
             reportDataGrid.SelectedIndex = -1;
             visitsFromReport.ItemsSource = null;
             LbPreviewReport.Content = "Wybierz raport aby zobaczyć podgląd";
+            CalendarReport.SelectedDate = DateTime.Now;
         }
 
         private void BtAddPatient_Click(object sender, RoutedEventArgs e)
@@ -123,12 +128,12 @@ namespace FizjoTerm
 
         private void BtSearchPatient_Click(object sender, RoutedEventArgs e)
         {
-            patientDataGrid.ItemsSource = Patient.SearchPatient(TbPatientName.Text, TbPatientSurname.Text, TbPatientPesel.Text, TbPatientAdress.Text, TbPatientPhone.Text, dbcontext);
+            patientViewSource.Source = Patient.SearchPatient(TbPatientName.Text, TbPatientSurname.Text, TbPatientPesel.Text, TbPatientAdress.Text, TbPatientPhone.Text, dbcontext).ToList();
         }
 
         private void BtViewAllPatient_Click(object sender, RoutedEventArgs e)
         {
-            patientDataGrid.ItemsSource = dbcontext.Patients.Local;
+            patientViewSource.Source = dbcontext.Patients.Local;
         }
 
         private void BtAddReferral_Click(object sender, RoutedEventArgs e)
@@ -140,11 +145,11 @@ namespace FizjoTerm
                 success = int.TryParse(TbNbOfDays.Text, out nbOfDays);
                 if (success)
                 {
-                    MessageBoxResult result = MessageBox.Show("Czy zapisać dla pacjenta " + ((Patient)CbPatient.SelectedItem).Name + " " + ((Patient)CbPatient.SelectedItem).Surname + "?", "Zapis", MessageBoxButton.YesNo);
+                    MessageBoxResult result = MessageBox.Show("Czy zapisać skierowanie dla pacjenta " + ((Patient)CbPatient.SelectedItem).Name + " " + ((Patient)CbPatient.SelectedItem).Surname + "?", "Zapis", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Referral.AddReferral(TbDiagnosis.Text, TbIcd10.Text, nbOfDays, DpDateReferral.SelectedDate.Value, CbPatient.SelectedItem as Patient, dbcontext);
-                        TbDiagnosis.Clear(); TbIcd10.Clear(); DpDateReferral.SelectedDate = null; TbNbOfDays.Clear(); CbPatient.SelectedItem = null;
+                        Referral.AddReferral(TbDiagnosis.Text, TbIcd10.Text, TbTreatments.Text, TbDoctor.Text, nbOfDays, DpDateReferral.SelectedDate.Value, CbPatient.SelectedItem as Patient, dbcontext);
+                        TbDiagnosis.Clear(); TbIcd10.Clear(); DpDateReferral.SelectedDate = null; TbNbOfDays.Clear(); CbPatient.SelectedItem = null; TbTreatments.Clear(); TbDoctor.Clear();
                     }
                 }
                 else
@@ -178,12 +183,12 @@ namespace FizjoTerm
             int nbOfDays;
             int.TryParse(TbNbOfDays.Text, out nbOfDays);
 
-            referralDataGrid.ItemsSource = Referral.SearchReferral(TbDiagnosis.Text, TbIcd10.Text, nbOfDays, DpDateReferral.SelectedDate.GetValueOrDefault(), CbPatient.SelectedItem as Patient, dbcontext);
+            referralViewSource.Source = Referral.SearchReferral(TbDiagnosis.Text, TbIcd10.Text, TbTreatments.Text, TbDoctor.Text, nbOfDays, DpDateReferral.SelectedDate.GetValueOrDefault(), CbPatient.SelectedItem as Patient, dbcontext).ToList();
         }
 
         private void BtShowAllReferrals_Click(object sender, RoutedEventArgs e)
         {
-            referralDataGrid.ItemsSource = dbcontext.Referrals.Local;
+            referralViewSource.Source = dbcontext.Referrals.Local;
         }
 
         private void BtAddPhysio_Click(object sender, RoutedEventArgs e)
@@ -197,7 +202,7 @@ namespace FizjoTerm
                     {
                         Physiotherapist.AddPhysiotherapist(TbPhysioName.Text, TbPhysioSurname.Text, TbPhysioAdress.Text, TbPhysioPhone.Text, TbPhysioEmail.Text , int.Parse(TbPhysioNpwz.Text), dbcontext);
                         physiotherapistDataGrid.Items.Refresh();
-                        TbPhysioName.Clear(); TbPhysioAdress.Clear(); TbPhysioNpwz.Clear(); TbPhysioPhone.Clear(); TbPhysioSurname.Clear();
+                        TbPhysioName.Clear(); TbPhysioAdress.Clear(); TbPhysioNpwz.Clear(); TbPhysioPhone.Clear(); TbPhysioSurname.Clear(); TbPhysioEmail.Clear();
                     }
                 }
                 else
@@ -228,12 +233,12 @@ namespace FizjoTerm
 
         private void BtSearchPhysio_Click(object sender, RoutedEventArgs e)
         {
-            physiotherapistDataGrid.ItemsSource = Physiotherapist.SearchPhysiotherapist(TbPhysioName.Text, TbPhysioSurname.Text, TbPhysioAdress.Text, TbPhysioPhone.Text, TbPhysioEmail.Text, TbPhysioNpwz.Text, dbcontext);
+            physiotherapistViewSource.Source = Physiotherapist.SearchPhysiotherapist(TbPhysioName.Text, TbPhysioSurname.Text, TbPhysioAdress.Text, TbPhysioPhone.Text, TbPhysioEmail.Text, TbPhysioNpwz.Text, dbcontext).ToList();
         }
 
         private void BtViewAllPhysio_Click(object sender, RoutedEventArgs e)
         {
-            physiotherapistDataGrid.ItemsSource = dbcontext.Physiotherapists.Local;
+            physiotherapistViewSource.Source = dbcontext.Physiotherapists.Local;
         }
 
         private void BtAddVisit_Click(object sender, RoutedEventArgs e)
@@ -263,7 +268,7 @@ namespace FizjoTerm
                                     Visit.AddVisit((Physiotherapist)CbPhysiotherapist.SelectedItem, (Referral)CbReferral.SelectedItem, date, CbVisitTime.SelectedItem.ToString(), dbcontext);
                                 }
                                 CbPhysiotherapist.SelectedIndex = -1; CbReferral.SelectedIndex = -1; CbPatient2.SelectedIndex = -1; CbVisitTime.SelectedIndex = -1; CalendarVisit.SelectedDates.Clear();
-                                visitDataGrid.ItemsSource = dbcontext.Visits.Local.Where(v => v.VisitDate.Date.Equals(DateTime.Now.Date));
+                                visitViewSource.Source = dbcontext.Visits.Local.Where(v => v.VisitDate.Date.Equals(DateTime.Now.Date)).ToList();
                                 visitDataGrid.Items.Refresh();
                                
                             }
@@ -276,13 +281,13 @@ namespace FizjoTerm
 
         private void CbPatient2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            List<Referral> referrals = dbcontext.Referrals.Local.Where(r => r.Patient.Equals(CbPatient2.SelectedItem as Patient)).ToList();
+            List<Referral> referrals = dbcontext.Referrals.Local.Where(r => r.Patient.Equals(CbPatient2.SelectedItem as Patient) && !r.ReferralCompleted.Equals(true)).ToList();
             if (referrals.Count() > 0)
             {
-                CbReferral.ItemsSource = dbcontext.Referrals.Local.Where(r => r.Patient.Equals(CbPatient2.SelectedItem as Patient));
+                CbReferral.ItemsSource = dbcontext.Referrals.Local.Where(r => r.Patient.Equals(CbPatient2.SelectedItem as Patient) && !r.ReferralCompleted.Equals(true)).ToList();
             }
             else if (CbPatient2.SelectedIndex > -1 && RbAdding.IsChecked == true)
-                MessageBox.Show("Brak zarejestrowanych skierowań dla pacjenta " + CbPatient2.SelectedItem.ToString());
+                MessageBox.Show("Brak aktywnych skierowań dla pacjenta " + CbPatient2.SelectedItem.ToString());
         }
 
         private void BtDeleteVisit_Click(object sender, RoutedEventArgs e)
@@ -306,7 +311,7 @@ namespace FizjoTerm
             CbVisitTime.IsEnabled = true;
             LabTodayVisits.Content = "Dzisiejsze wizyty:";
             CbReferral.IsEnabled = true;
-            visitDataGrid.ItemsSource = dbcontext.Visits.Local.Where(v => v.VisitDate.Date.Equals(DateTime.Now.Date));
+            visitViewSource.Source = dbcontext.Visits.Local.Where(v => v.VisitDate.Date.Equals(DateTime.Now.Date)).ToList();
             visitDataGrid.Items.Refresh();
 
         }
@@ -320,13 +325,13 @@ namespace FizjoTerm
             CbReferral.IsEnabled = false;
             //visitViewSource.Source = dbcontext.Visits.Local;
             //visitDataGrid.Items.Refresh();
-            visitDataGrid.ItemsSource = dbcontext.Visits.Local;
+            visitViewSource.Source = dbcontext.Visits.Local;
 
         }
 
         private void BtSearchVisit_Click(object sender, RoutedEventArgs e)
         {
-            visitDataGrid.ItemsSource = Visit.SearchVisit(CbPatient2.SelectedItem as Patient, CbPhysiotherapist.SelectedItem as Physiotherapist, CalendarVisit.SelectedDate, dbcontext);
+            visitViewSource.Source = Visit.SearchVisit(CbPatient2.SelectedItem as Patient, CbPhysiotherapist.SelectedItem as Physiotherapist, CalendarVisit.SelectedDate, dbcontext).ToList();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -436,6 +441,7 @@ namespace FizjoTerm
 
         private void visitDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+
             dbcontext.SaveChanges();
         }
 

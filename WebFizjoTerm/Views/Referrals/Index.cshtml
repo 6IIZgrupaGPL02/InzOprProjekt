@@ -4,13 +4,16 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Skierowania</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nowe", "Create")
 </p>
 <table class="table">
     <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.ImieNazwiskoPesel)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Diagnosis)
         </th>
@@ -27,37 +30,54 @@
             @Html.DisplayNameFor(model => model.DateSaved)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Patient.Pesel)
+            @Html.DisplayNameFor(model => model.Treatments)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Doctor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReferralCompleted)
+        </th>
+
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Diagnosis)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Icd10)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NbOfDays)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateReferral)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateSaved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Patient.Pesel)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdReferral }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdReferral }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdReferral })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Patient.ImieNazwiskoPesel)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Diagnosis)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Icd10)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NbOfDays)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateReferral)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateSaved)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Treatments)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Doctor)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ReferralCompleted)
+    </td>
+
+    <td>
+        @Html.ActionLink("Edycja", "Edit", new { id = item.IdReferral }) |
+        @Html.ActionLink("Szczegóły", "Details", new { id = item.IdReferral }) |
+        @Html.ActionLink("Usuń", "Delete", new { id = item.IdReferral })
+    </td>
+</tr>
 }
 
 </table>

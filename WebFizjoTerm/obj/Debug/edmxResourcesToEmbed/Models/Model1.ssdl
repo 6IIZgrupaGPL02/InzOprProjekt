@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DefConnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Pesel" Type="nvarchar(max)" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="Surname" Type="nvarchar(max)" />
+    <Property Name="Adress" Type="nvarchar(max)" />
+    <Property Name="Phone" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Physiotherapist">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="Npwz" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="Surname" Type="nvarchar(max)" />
+    <Property Name="Adress" Type="nvarchar(max)" />
+    <Property Name="Phone" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Referral">
+    <Key>
+      <PropertyRef Name="IdReferral" />
+    </Key>
+    <Property Name="IdReferral" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPatient" Type="int" Nullable="false" />
+    <Property Name="Diagnosis" Type="nvarchar(max)" />
+    <Property Name="Icd10" Type="nvarchar(max)" />
+    <Property Name="NbOfDays" Type="int" Nullable="false" />
+    <Property Name="DateReferral" Type="datetime" Nullable="false" />
+    <Property Name="DateSaved" Type="datetime" Nullable="false" />
+    <Property Name="Treatments" Type="nvarchar(max)" />
+    <Property Name="Doctor" Type="nvarchar(max)" />
+    <Property Name="ReferralCompleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Report">
+    <Key>
+      <PropertyRef Name="IdReport" />
+    </Key>
+    <Property Name="IdReport" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Visit">
+    <Key>
+      <PropertyRef Name="IdVisit" />
+    </Key>
+    <Property Name="IdVisit" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPhysiotherapist" Type="int" Nullable="false" />
+    <Property Name="IdReferral" Type="int" Nullable="false" />
+    <Property Name="VisitDate" Type="datetime" Nullable="false" />
+    <Property Name="VisitTime" Type="nvarchar(max)" />
+    <Property Name="DateSaved" Type="datetime" Nullable="false" />
+    <Property Name="VisitCompleted" Type="bit" Nullable="false" />
+    <Property Name="VisitSettled" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VisitReports">
+    <Key>
+      <PropertyRef Name="Visit_IdVisit" />
+      <PropertyRef Name="Report_IdReport" />
+    </Key>
+    <Property Name="Visit_IdVisit" Type="int" Nullable="false" />
+    <Property Name="Report_IdReport" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_dbo_Referral_dbo_Patient_IdPatient">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Referral" Type="Self.Referral" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Referral">
+        <PropertyRef Name="IdPatient" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Visit_dbo_Physiotherapist_IdPhysiotherapist">
+    <End Role="Physiotherapist" Type="Self.Physiotherapist" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Physiotherapist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Visit">
+        <PropertyRef Name="IdPhysiotherapist" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Visit_dbo_Referral_IdReferral">
+    <End Role="Referral" Type="Self.Referral" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Referral">
+        <PropertyRef Name="IdReferral" />
+      </Principal>
+      <Dependent Role="Visit">
+        <PropertyRef Name="IdReferral" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_VisitReports_dbo_Report_Report_IdReport">
+    <End Role="Report" Type="Self.Report" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VisitReports" Type="Self.VisitReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Report">
+        <PropertyRef Name="IdReport" />
+      </Principal>
+      <Dependent Role="VisitReports">
+        <PropertyRef Name="Report_IdReport" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_VisitReports_dbo_Visit_Visit_IdVisit">
+    <End Role="Visit" Type="Self.Visit" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VisitReports" Type="Self.VisitReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Visit">
+        <PropertyRef Name="IdVisit" />
+      </Principal>
+      <Dependent Role="VisitReports">
+        <PropertyRef Name="Visit_IdVisit" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DefConnModelStoreContainer">
+    <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Physiotherapist" EntityType="Self.Physiotherapist" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Referral" EntityType="Self.Referral" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Visit" EntityType="Self.Visit" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VisitReports" EntityType="Self.VisitReports" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_dbo_Referral_dbo_Patient_IdPatient" Association="Self.FK_dbo_Referral_dbo_Patient_IdPatient">
+      <End Role="Patient" EntitySet="Patient" />
+      <End Role="Referral" EntitySet="Referral" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Visit_dbo_Physiotherapist_IdPhysiotherapist" Association="Self.FK_dbo_Visit_dbo_Physiotherapist_IdPhysiotherapist">
+      <End Role="Physiotherapist" EntitySet="Physiotherapist" />
+      <End Role="Visit" EntitySet="Visit" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Visit_dbo_Referral_IdReferral" Association="Self.FK_dbo_Visit_dbo_Referral_IdReferral">
+      <End Role="Referral" EntitySet="Referral" />
+      <End Role="Visit" EntitySet="Visit" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_VisitReports_dbo_Report_Report_IdReport" Association="Self.FK_dbo_VisitReports_dbo_Report_Report_IdReport">
+      <End Role="Report" EntitySet="Report" />
+      <End Role="VisitReports" EntitySet="VisitReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_VisitReports_dbo_Visit_Visit_IdVisit" Association="Self.FK_dbo_VisitReports_dbo_Visit_Visit_IdVisit">
+      <End Role="Visit" EntitySet="Visit" />
+      <End Role="VisitReports" EntitySet="VisitReports" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

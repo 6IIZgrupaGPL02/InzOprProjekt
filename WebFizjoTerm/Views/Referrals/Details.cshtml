@@ -4,10 +4,10 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+    <h2>Szczegóły</h2>
 
 <div>
-    <h4>Referral</h4>
+    <h4>Skierowanie</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -51,6 +51,30 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Treatments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Treatments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Doctor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Doctor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReferralCompleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReferralCompleted)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Patient.Pesel)
         </dt>
 
@@ -61,6 +85,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdReferral }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edycja", "Edit", new { id = Model.IdReferral }) |
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>

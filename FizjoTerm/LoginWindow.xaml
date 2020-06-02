@@ -16,7 +16,7 @@
     <Grid Margin="0,0,49.4,-19">
         <Grid Margin="0,0,22,26">
             <StackPanel Margin="0,0,-71,9.2" >
-                <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,0,0,28" Click="Button_Click_1">
+                <Button x:Name="CloseButton" HorizontalAlignment="Right" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,0,0,28" Click="CloseButton_Click">
                     <materialDesign:PackIcon Kind="Close"/>
                 </Button>
                 <Border Background="WhiteSmoke" Margin="10,20,9.8,20" CornerRadius="5" Height="376">

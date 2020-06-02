@@ -12,13 +12,12 @@ namespace WebFizjoTerm.Controllers
 {
     public class VisitsController : Controller
     {
-        private DefConnEntities1 db = new DefConnEntities1();
+        private DefConnEntities2 db = new DefConnEntities2();
 
         // GET: Visits
-        [Authorize]
         public ActionResult Index()
         {
-            var visit = db.Visit.Include(v => v.Physiotherapist).Include(v => v.Referral).Include(v => v.Report);
+            var visit = db.Visit.Include(v => v.Physiotherapist).Include(v => v.Referral);
             return View(visit.ToList());
         }
 
@@ -40,9 +39,8 @@ namespace WebFizjoTerm.Controllers
         // GET: Visits/Create
         public ActionResult Create()
         {
-            ViewBag.IdPhysiotherapist = new SelectList(db.Physiotherapist, "Id", "Email");
-            ViewBag.IdReferral = new SelectList(db.Referral, "IdReferral", "Diagnosis");
-            ViewBag.Report_IdReport = new SelectList(db.Report, "IdReport", "Name");
+            ViewBag.IdPhysiotherapist = new SelectList(db.Physiotherapist, "Id", "NameSurname");
+            ViewBag.IdReferral = new SelectList(db.Referral, "IdReferral", "Patient.ImieNazwiskoPesel");
             return View();
         }
 
@@ -51,7 +49,7 @@ namespace WebFizjoTerm.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdVisit,IdPhysiotherapist,IdReferral,VisitDate,VisitTime,DateSaved,Report_IdReport")] Visit visit)
+        public ActionResult Create([Bind(Include = "IdVisit,IdPhysiotherapist,IdReferral,VisitDate,VisitTime,DateSaved,VisitCompleted,VisitSettled")] Visit visit)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +60,6 @@ namespace WebFizjoTerm.Controllers
 
             ViewBag.IdPhysiotherapist = new SelectList(db.Physiotherapist, "Id", "Email", visit.IdPhysiotherapist);
             ViewBag.IdReferral = new SelectList(db.Referral, "IdReferral", "Diagnosis", visit.IdReferral);
-            ViewBag.Report_IdReport = new SelectList(db.Report, "IdReport", "Name", visit.Report_IdReport);
             return View(visit);
         }
 
@@ -78,9 +75,8 @@ namespace WebFizjoTerm.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IdPhysiotherapist = new SelectList(db.Physiotherapist, "Id", "Email", visit.IdPhysiotherapist);
-            ViewBag.IdReferral = new SelectList(db.Referral, "IdReferral", "Diagnosis", visit.IdReferral);
-            ViewBag.Report_IdReport = new SelectList(db.Report, "IdReport", "Name", visit.Report_IdReport);
+            ViewBag.IdPhysiotherapist = new SelectList(db.Physiotherapist, "Id", "NameSurname", visit.IdPhysiotherapist);
+            ViewBag.IdReferral = new SelectList(db.Referral, "IdReferral", "Patient.ImieNazwiskoPesel", visit.IdReferral);
             return View(visit);
         }
 
@@ -89,7 +85,7 @@ namespace WebFizjoTerm.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdVisit,IdPhysiotherapist,IdReferral,VisitDate,VisitTime,DateSaved,Report_IdReport")] Visit visit)
+        public ActionResult Edit([Bind(Include = "IdVisit,IdPhysiotherapist,IdReferral,VisitDate,VisitTime,DateSaved,VisitCompleted,VisitSettled")] Visit visit)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +95,6 @@ namespace WebFizjoTerm.Controllers
             }
             ViewBag.IdPhysiotherapist = new SelectList(db.Physiotherapist, "Id", "Email", visit.IdPhysiotherapist);
             ViewBag.IdReferral = new SelectList(db.Referral, "IdReferral", "Diagnosis", visit.IdReferral);
-            ViewBag.Report_IdReport = new SelectList(db.Report, "IdReport", "Name", visit.Report_IdReport);
             return View(visit);
         }
 

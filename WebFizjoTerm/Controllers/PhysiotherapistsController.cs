@@ -12,10 +12,9 @@ namespace WebFizjoTerm.Controllers
 {
     public class PhysiotherapistsController : Controller
     {
-        private DefConnEntities1 db = new DefConnEntities1();
+        private DefConnEntities2 db = new DefConnEntities2();
 
         // GET: Physiotherapists
-        [Authorize]
         public ActionResult Index()
         {
             return View(db.Physiotherapist.ToList());

@@ -29,13 +29,13 @@ namespace TabMenu2.Models
         public string VisitTime { get; set; }
         public DateTime DateSaved { get; set; }
         public bool VisitCompleted { get; set; }
-
+        public bool VisitSettled { get; set; }
         public virtual Physiotherapist Physiotherapist { get; set; }
         public virtual Referral Referral { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
 
         public Visit() { }
-        public Visit(Physiotherapist physio, Referral referral, DateTime date, string time, bool visitCompleted = false)
+        public Visit(Physiotherapist physio, Referral referral, DateTime date, string time, bool visitCompleted = false, bool visitSettled = false)
         {
             this.Physiotherapist = physio;
             this.Referral = referral;
@@ -43,6 +43,7 @@ namespace TabMenu2.Models
             this.VisitTime = time;
             this.DateSaved = DateTime.Now;
             this.VisitCompleted = visitCompleted;
+            this.VisitSettled = visitSettled;
         }
 
         public static void AddVisit(Physiotherapist physio, Referral referral, DateTime date, string time, ApplicationDbContext dbcontext)
@@ -84,7 +85,10 @@ namespace TabMenu2.Models
 
         public override string ToString()
         {
-            return VisitDate + " " + Referral.Patient.ToString();
+            if(VisitCompleted)
+            return VisitDate.ToShortDateString() + " " + VisitTime + "\t" +  Referral.Patient.ToString() + "\t" + Physiotherapist + "\t- zrealizowana";
+            else
+            return VisitDate.ToShortDateString() + " " + VisitTime + "\t" + Referral.Patient.ToString() + "\t" + Physiotherapist + "\t- niezrealizowana";
         }
     }
 }
